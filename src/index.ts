@@ -169,25 +169,25 @@ const Deers: Animal[] = [
 const aviaries: Aviary[] = [{
     animals: [],
     biome: "ice",
-    area: 20,
+    area: 30,
     hasPond: true
 },
 {
     animals: [],
     biome: "desert",
-    area: 20,
+    area: 30,
     hasPond: false
 },
 {
     animals: [],
     biome: "taiga",
-    area: 20,
+    area: 30,
     hasPond: false
 },
 {
     animals: [],
     biome: "tropical",
-    area: 20,
+    area: 30,
     hasPond: false
 }]
 
@@ -200,18 +200,22 @@ const allAnimals: Animal[] = [
     ...Camels,
     ...Deers]
 
-main();
 
-function main(): void {
+console.log('Кол-во еды для всего зоопарка: ' + getAmountOfFoodNeeded(allAnimals));
 
-    console.log('Кол-во еды для всего зоопарка: ' + getAmountOfFoodNeeded(allAnimals));
+putAnimalsInAviaries(allAnimals);
 
-    putAnimalsInAviaries(allAnimals);
+const objectsToDisplay = aviaries.map(aviary => {
+    let container: {biome: string, animals: string[]} = {
+        biome: aviary.biome,
+        animals: aviary.animals.map(an => an.description.kindOfAnimal)
+    };
+    return container;})
 
-    console.log(JSON.stringify(aviaries));
+console.log(JSON.stringify(objectsToDisplay));
 
-    console.log('Незаселённые животные: ' + JSON.stringify(allAnimals));
-}
+console.log('Незаселённые животные: ' + JSON.stringify(allAnimals));
+
 
 function getAmountOfFoodNeeded(animals: Animal[]): number {
     let result = 0;
@@ -225,7 +229,7 @@ function putAnimalsInAviaries(animals: Animal[]) {
     for (const aviary of aviaries) {
         for (const animal of animals) {
             if (tryPutInAviary(aviary, animal)) {
-                removeItem(animals, animal)
+                removeItem(animals, animal)//для понимания, кто остался незаселённым(не работает из-за замыкания, походу)
                 break;
             }
         }
@@ -245,11 +249,11 @@ function tryPutInAviary(aviary: Aviary, animal: Animal): boolean {
 }
 
 function removeFromAviary(aviary: Aviary, animal: Animal): void {
-    removeItem(aviary.animals, animal) //сравнение по ссылке
+    removeItem(aviary.animals, animal) 
 }
 
 function removeItem(arr: object[], item: object) {
-    arr = arr.filter(arrItem => arrItem != item)
+    arr = arr.filter(arrItem => arrItem != item) //сравнение по ссылке
 }
 
 function canBePuttedInAviary(aviary: Aviary, animal: Animal): boolean {
